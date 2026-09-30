@@ -1,53 +1,55 @@
-<div class="card mt-3">
-  <div class="card-header">
-    <h4>{{ isEditMode ? 'Редактировать книгу' : 'Добавить новую книгу' }}</h4>
-  </div>
-  <div class="card-body">
+<div class="book-form-wrapper">
+  <div class="book-form-card">
+
+    <h2 class="form-title">{{ isEditMode ? 'Редактировать книгу' : 'Добавить новую книгу' }}</h2>
+
     <!-- #bookForm="ngForm" подключает Angular к HTML-форме -->
-    <form #bookForm="ngForm" (ngSubmit)="onSubmit()">
-      
+    <form #bookForm="ngForm" (ngSubmit)="onSubmit()" class="book-form">
+
       <!-- Поле: Название -->
-      <div class="mb-3">
-        <label for="name" class="form-label">Название книги</label>
+      <div class="form-field">
+        <label for="name" class="form-label-pixel">Название книги</label>
         <input
           type="text"
-          class="form-control"
+          class="form-input-pixel"
+          [class.is-invalid]="nameInput.invalid && nameInput.touched"
           id="name"
           name="name"
           [(ngModel)]="book.name"
           required
           #nameInput="ngModel"
         />
-        <!-- Простая валидация -->
-        <div *ngIf="nameInput.invalid && nameInput.touched" class="text-danger mt-1">
+        <div *ngIf="nameInput.invalid && nameInput.touched" class="field-error">
           Название книги обязательно!
         </div>
       </div>
 
       <!-- Поле: Автор -->
-      <div class="mb-3">
-        <label for="author" class="form-label">Автор</label>
+      <div class="form-field">
+        <label for="author" class="form-label-pixel">Автор</label>
         <input
           type="text"
-          class="form-control"
+          class="form-input-pixel"
+          [class.is-invalid]="authorInput.invalid && authorInput.touched"
           id="author"
           name="author"
           [(ngModel)]="book.author"
           required
           #authorInput="ngModel"
         />
-        <div *ngIf="authorInput.invalid && authorInput.touched" class="text-danger mt-1">
+        <div *ngIf="authorInput.invalid && authorInput.touched" class="field-error">
           Имя автора обязательно!
         </div>
       </div>
 
-      <!-- Кнопки -->
-      <button type="submit" class="btn btn-success me-2" [disabled]="bookForm.invalid">
-        {{ isEditMode ? 'Сохранить' : 'Добавить' }}
-      </button>
-      <button type="button" class="btn btn-secondary" routerLink="/">
-        Отмена
-      </button>
+      <!-- 🎮 Кнопки -->
+      <div class="form-actions">
+        <a routerLink="/" class="btn-form-cancel">← Отмена</a>
+        <button type="submit" class="btn-form-save" [disabled]="bookForm.invalid">
+          {{ isEditMode ? '✔ Сохранить' : '+ Добавить' }}
+        </button>
+      </div>
+
     </form>
   </div>
 </div>
