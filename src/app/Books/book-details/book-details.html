@@ -1,0 +1,15 @@
+<div *ngIf="book" class="card mt-3">
+  <div class="card-header">
+    Детали книги
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ book.name }}</h5>
+    <p class="card-text"><strong>Автор:</strong> {{ book.author }}</p>
+    <p class="card-text"><strong>ID:</strong> {{ book.id }}</p>
+    <button class="btn btn-primary" routerLink="/">Назад к списку</button>
+  </div>
+</div>
+
+<div *ngIf="!book" class="alert alert-danger mt-3">
+  Книга не найдена!
+</div>

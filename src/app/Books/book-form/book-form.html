@@ -1,0 +1,53 @@
+<div class="card mt-3">
+  <div class="card-header">
+    <h4>{{ isEditMode ? 'Редактировать книгу' : 'Добавить новую книгу' }}</h4>
+  </div>
+  <div class="card-body">
+    <!-- #bookForm="ngForm" подключает Angular к HTML-форме -->
+    <form #bookForm="ngForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Поле: Название -->
+      <div class="mb-3">
+        <label for="name" class="form-label">Название книги</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          [(ngModel)]="book.name"
+          required
+          #nameInput="ngModel"
+        />
+        <!-- Простая валидация -->
+        <div *ngIf="nameInput.invalid && nameInput.touched" class="text-danger mt-1">
+          Название книги обязательно!
+        </div>
+      </div>
+
+      <!-- Поле: Автор -->
+      <div class="mb-3">
+        <label for="author" class="form-label">Автор</label>
+        <input
+          type="text"
+          class="form-control"
+          id="author"
+          name="author"
+          [(ngModel)]="book.author"
+          required
+          #authorInput="ngModel"
+        />
+        <div *ngIf="authorInput.invalid && authorInput.touched" class="text-danger mt-1">
+          Имя автора обязательно!
+        </div>
+      </div>
+
+      <!-- Кнопки -->
+      <button type="submit" class="btn btn-success me-2" [disabled]="bookForm.invalid">
+        {{ isEditMode ? 'Сохранить' : 'Добавить' }}
+      </button>
+      <button type="button" class="btn btn-secondary" routerLink="/">
+        Отмена
+      </button>
+    </form>
+  </div>
+</div>
