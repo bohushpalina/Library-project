@@ -4,25 +4,32 @@
   <a routerLink="/book/add" class="btn btn-add-book">+ Добавить книгу</a>
 </div>
 
-<!-- Сетка карточек -->
+<!-- Сетка книг -->
 <div class="books-grid">
   <div *ngFor="let book of books; let i = index" class="book-card">
     
-    <!-- Обложка -->
-    <div class="book-cover">
-      <div class="book-spine"></div>
-      <div class="book-cover-content">
-        <img src="book.png" alt="Книга" class="book-icon-img">
+    <!-- Контейнер книги -->
+    <div class="book-spine-wrapper">
+      <!-- 1. Закрытый корешок (по умолчанию) -->
+      <div class="book-spine-bg"></div>
+      <img src="book_pr.png" alt="Книга" class="book-icon-img spine-img">
+
+      <!-- 2. Открытая книга при наведении -->
+      <div class="opened-book-wrapper">
+        <!-- Маска цвета обложки (вырезается точно по силуэту opened_book_back.png) -->
+        <div class="opened-book-bg"></div>
+        <!-- Прозрачный PNG с деталями, контуром и блестками -->
+        <img src="opened_book_obv.png" alt="Открытая книга" class="book-icon-img cover-img">
       </div>
     </div>
 
-    <!-- Детали книги -->
+    <!-- Подпись под книгой -->
     <div class="book-details">
       <div class="book-info">
-        <a [routerLink]="['/book', book.id]" class="book-title">
+        <a [routerLink]="['/book', book.id]" class="book-title" [title]="book.name">
           {{ book.name }}
         </a>
-        <div class="book-author">{{ book.author }}</div>
+        <div class="book-author" [title]="book.author">{{ book.author }}</div>
       </div>
 
       <div class="book-actions">
