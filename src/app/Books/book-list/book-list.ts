@@ -17,13 +17,20 @@ export class BookListComponent implements OnInit {
   constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
-    this.books = this.bookService.getBooks();
+    this.loadBooks();
+  }
+
+  loadBooks(): void {
+    this.bookService.getBooks().subscribe(data => {
+      this.books = data;
+    });
   }
 
   deleteBook(id: number): void {
     if (confirm('Вы уверены, что хотите удалить эту книгу?')) {
-      this.bookService.deleteBook(id);
-      this.books = this.bookService.getBooks(); 
+      this.bookService.deleteBook(id).subscribe(() => {
+        this.loadBooks();
+      });
     }
   }
 }

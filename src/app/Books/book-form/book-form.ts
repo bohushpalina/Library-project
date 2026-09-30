@@ -25,20 +25,24 @@ export class BookFormComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      const existingBook = this.bookService.getBook(id);
-      if (existingBook) {
-        this.book = { ...existingBook }; 
-        this.isEditMode = true;
-      }
+      this.bookService.getBook(id).subscribe(existingBook => {
+        if (existingBook) {
+          this.book = { ...existingBook }; 
+          this.isEditMode = true;
+        }
+      });
     }
   }
 
   onSubmit(): void {
     if (this.isEditMode) {
-      this.bookService.updateBook(this.book);
+      this.bookService.updateBook(this.book).subscribe(() => {
+        this.router.navigate(['/']);
+      });
     } else {
-      this.bookService.addBook(this.book);
+      this.bookService.addBook(this.book).subscribe(() => {
+        this.router.navigate(['/']);
+      });
     }
-    this.router.navigate(['/']);
   }
 }
