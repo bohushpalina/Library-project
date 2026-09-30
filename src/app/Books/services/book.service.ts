@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { Book } from '../book';
 import { Books } from '../mock-book-list';
 
@@ -13,12 +14,10 @@ export class BookService {
     this.loadBooks();
   }
 
-  // Проверка, что код выполняется в браузере (защита от ошибок при SSR)
   private isBrowser(): boolean {
     return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
   }
 
-  // Загружаем книги из localStorage, а если их там нет — из мок-файла
   private loadBooks(): void {
     if (this.isBrowser()) {
       const savedBooks = localStorage.getItem(this.storageKey);
@@ -27,47 +26,56 @@ export class BookService {
         return;
       }
     }
-    // Если в localStorage ничего нет, берём начальные данные
     this.booksList = [...Books];
     this.saveToStorage();
   }
 
-  // Сохраняем текущий массив книг в localStorage в формате JSON-строки
   private saveToStorage(): void {
     if (this.isBrowser()) {
       localStorage.setItem(this.storageKey, JSON.stringify(this.booksList));
     }
   }
 
-  getBooks(): Book[] {
-    return this.booksList;
+  getBooks(): Observable<Book[]> {
+    return of([...this.booksList]);
   }
 
-  getBook(id: number): Book | undefined {
-    return this.booksList.find(book => book.id === id);
+  getBook(id: number): Observable<Book | undefined> {
+    const foundBook = this.booksList.find(book => Number(book.id) === Number(id));
+    return of(foundBook ? { ...foundBook } : undefined);
   }
 
-  addBook(book: Book): void {
+  addBook(book: Book): Observable<Book> {
     const newId = this.booksList.length > 0 
-      ? Math.max(...this.booksList.map(b => b.id)) + 1 
+      ? Math.max(...this.booksList.map(b => Number(b.id))) + 1 
       : 1;
-    this.booksList.push({ ...book, id: newId });
-    this.saveToStorage(); // Сохраняем изменения
+
+    const newBook: Book = { ...book, id: newId };
+    this.booksList.push(newBook);
+    this.saveToStorage();
+
+    return of(newBook);
   }
 
-  updateBook(updatedBook: Book): void {
-    const index = this.booksList.findIndex(b => b.id === updatedBook.id);
+  updateBook(updatedBook: Book): Observable<Book> {
+    const index = this.booksList.findIndex(b => Number(b.id) === Number(updatedBook.id));
     if (index !== -1) {
       this.booksList[index] = { ...updatedBook };
-      this.saveToStorage(); // Сохраняем изменения
+      this.saveToStorage();
     }
+    return of(updatedBook);
   }
 
-  deleteBook(id: number): void {
-    const index = this.booksList.findIndex(b => b.id === id);
+  deleteBook(id: number): Observable<boolean> {
+    const index = this.booksList.findIndex(b => Number(b.id) === Number(id));
+    let isDeleted = false;
+
     if (index !== -1) {
       this.booksList.splice(index, 1);
-      this.saveToStorage(); // Сохраняем изменения
+      this.saveToStorage();
+      isDeleted = true;
     }
+
+    return of(isDeleted);
   }
 }

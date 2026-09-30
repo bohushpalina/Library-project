@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 import { Book } from '../book';
 import { BookService } from '../services/book.service';
 
@@ -20,9 +21,13 @@ export class BookDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      this.book = this.bookService.getBook(id);
+    this.route.paramMap.pipe(
+      switchMap(params => {
+        const id = Number(params.get('id'));
+        return this.bookService.getBook(id);
+      })
+    ).subscribe(foundBook => {
+      this.book = foundBook;
     });
   }
 }
