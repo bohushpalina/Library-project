@@ -1,0 +1,205 @@
+/* ==========================================
+   ОСНОВНАЯ КАРТОЧКА ДЕТАЛЕЙ КНИГИ
+   (только контейнер раскладки, без фона)
+   ========================================== */
+.book-details-card {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+  min-height: calc(82vh - 100px);
+  margin: 20px 0;
+  padding: 0 0 80px 0; /* нижний отступ поднимает весь контент на ~40px */
+  box-sizing: border-box;
+
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ==========================================
+   ЛЕВАЯ СТОРОНА: СПРАЙТ КНИГИ
+   ========================================== */
+.book-visual-col {
+  --book-size: clamp(340px, 42vw, 620px); /* размер книги меняй здесь */
+
+  flex: 0 0 var(--book-size);
+  width: var(--book-size);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.opened-book-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 380 / 360; /* реальные пропорции open-up.png (ширина / высота) */
+  display: block;
+  transform: translate(-70px, -50px); /* влево на 70px, вверх на 50px */
+}
+
+/* Задняя маска обложки + передний слой страниц */
+.opened-book-bg,
+.cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Задняя маска обложки с динамическим цветом */
+.opened-book-bg {
+  z-index: 1;
+  background-color: var(--book-color, #5C1D18);
+  -webkit-mask-image: url('/open-back.png');
+  mask-image: url('/open-back.png');
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  image-rendering: pixelated;
+}
+
+/* Передний слой с текстурой страниц */
+.cover-img {
+  z-index: 2;
+  max-width: none;
+  object-fit: fill;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
+}
+
+/* ==========================================
+   ПРАВАЯ СТОРОНА: ПЛАШКА С ИНФОРМАЦИЕЙ
+   ========================================== */
+.book-info-col {
+  flex: 1 1 0;
+  min-width: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px 40px;
+  box-sizing: border-box;
+  transform: translateY(-20px); /* плашка чуть выше */
+
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid #2b2d42;
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.book-title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #2b2d42;
+  margin: 0;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.book-id {
+  font-size: 1.1rem;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.book-author {
+  font-size: 1.5rem;
+  color: #2b2d42;
+  margin: 4px 0 0 0;
+}
+
+/* ==========================================
+   🎮 КНОПКИ УПРАВЛЕНИЯ
+   ========================================== */
+.details-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-detail-back {
+  background: rgba(255, 255, 255, 0.65);
+  color: #2b2d42;
+  border: 2px solid #2b2d42;
+  border-radius: 12px;
+  padding: 12px 26px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 3px 3px 0px #2b2d42;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-detail-back:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2b2d42;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #2b2d42;
+}
+
+.btn-detail-edit {
+  background-color: #ff8d2f;
+  color: #ffffff;
+  border: 2px solid #2b2d42;
+  border-radius: 12px;
+  padding: 12px 26px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  box-shadow: 3px 3px 0px #2b2d42;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-detail-edit:hover {
+  background-color: #e0741e;
+  color: #ffffff;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px #2b2d42;
+}
+
+/* ==========================================
+   ОШИБКА "КНИГА НЕ НАЙДЕНА"
+   ========================================== */
+.not-found-card {
+  width: 100%;
+  min-height: calc(70vh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  border: 2px solid #2b2d42;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.not-found-card h3 {
+  color: #9f1239;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}

@@ -1,16 +1,41 @@
-<div *ngIf="book; else notFound" class="card mt-3">
-  <div class="card-body">
-    <h2>{{ book.name }}</h2>
-    <p class="text-muted">id: {{ book.id }}</p>
-    <p class="text-muted">Автор: {{ book.author }}</p>
-    <a routerLink="/" class="btn btn-secondary me-2">Назад к списку</a>
-    <a [routerLink]="['/book/edit', book.id]" class="btn btn-warning">Редактировать</a>
+<div *ngIf="book; else notFound" 
+     class="book-details-card" 
+     [style.--book-color]="['#3D1E0B','#522108','#5C1D18','#4A2040','#2C3A2C','#612B11','#732A19','#3B2820'][(book.id || 0) % 8]">
+  
+  <!-- 📖 Левая колонка: увеличенный спрайт открытой книги -->
+  <div class="book-visual-col">
+    <div class="opened-book-wrapper">
+      <div class="opened-book-bg"></div>
+      <img src="/open-up.png" alt="Открытая книга" class="cover-img">
+    </div>
   </div>
+
+  <!-- 📜 Правая колонка: текстовая информация и кнопки -->
+  <div class="book-info-col">
+    <h2 class="book-title">{{ book.name }}</h2>
+    
+    <div class="book-meta">
+      <span class="book-id">id: {{ book.id }}</span>
+      <p *ngIf="book.author" class="book-author"><strong>Автор:</strong> {{ book.author }}</p>
+    </div>
+
+    <!-- 🎮 Кнопки действия в общей цветовой гамме -->
+    <div class="details-actions">
+      <a routerLink="/" class="btn-detail-back">
+        ← Назад к списку
+      </a>
+      <a [routerLink]="['/book/edit', book.id]" class="btn-detail-edit">
+        ✎ Редактировать
+      </a>
+    </div>
+  </div>
+
 </div>
 
+<!-- Сообщение, если книга не найдена -->
 <ng-template #notFound>
-  <div class="alert alert-danger mt-3">
-    Книга не найдена!
-    <a routerLink="/" class="alert-link ms-2">Вернуться к списку</a>
+  <div class="not-found-card">
+    <h3>Книга не найдена!</h3>
+    <a routerLink="/" class="btn-detail-back">Вернуться к списку</a>
   </div>
 </ng-template>

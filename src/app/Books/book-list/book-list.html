@@ -6,11 +6,14 @@
 
 <!-- Сетка книг -->
 <div class="books-grid">
-  <div *ngFor="let book of books; let i = index" class="book-card">
-    
+  <!-- 🎨 Цвет берётся по id книги — та же формула, что на странице деталей -->
+  <div *ngFor="let book of books; let i = index"
+       class="book-card"
+       [style.--book-color]="['#3D1E0B','#522108','#5C1D18','#4A2040','#2C3A2C','#612B11','#732A19','#3B2820'][(book.id || 0) % 8]">
+
     <!-- Кликабельная книга -->
     <a [routerLink]="['/book', book.id]" class="book-spine-wrapper">
-      
+
       <!-- 1. Закрытая книга -->
       <div class="closed-book-part">
         <div class="book-spine-bg"></div>

@@ -36,27 +36,16 @@ body {
 }
 
 .book-card {
+  /* Цвет --book-color задаётся в HTML по id книги (см. book-list.html) */
   background: transparent;
   border: none;
   padding: 0;
   position: relative;
-  width: 110px; 
+  width: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-/* ==========================================
-   ТЁМНАЯ БЛАГОРОДНАЯ ПАЛИТРА КНИГ
-   ========================================== */
-.book-card:nth-child(8n+1) { --book-color: #3D1E0B; } /* Тёмный орех */
-.book-card:nth-child(8n+2) { --book-color: #522108; } /* Эспрессо */
-.book-card:nth-child(8n+3) { --book-color: #5C1D18; } /* Тёмный бордо */
-.book-card:nth-child(8n+4) { --book-color: #4A2040; } /* Тёмная слива */
-.book-card:nth-child(8n+5) { --book-color: #2C3A2C; } /* Тёмный хвойный */
-.book-card:nth-child(8n+6) { --book-color: #612B11; } /* Глубокий каштан */
-.book-card:nth-child(8n+7) { --book-color: #732A19; } /* Махагон */
-.book-card:nth-child(8n+8) { --book-color: #3B2820; } /* Тёмный шоколад */
 
 /* ==========================================
    ЛОГИКА ССЫЛКИ-КАРТИНКИ
@@ -88,7 +77,7 @@ body {
   width: 18%;
   border-radius: 8px;
   z-index: 1;
-  background-color: var(--book-color);
+  background-color: var(--book-color, #5C1D18);
 }
 
 .spine-img {
@@ -106,11 +95,11 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%) translateY(10px) scale(0.9);
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   opacity: 0;
   pointer-events: none;
   z-index: 20;
@@ -124,7 +113,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  background-color: var(--book-color);
+  background-color: var(--book-color, #5C1D18);
   -webkit-mask-image: url('/opened_book_back.png');
   mask-image: url('/opened_book_back.png');
   -webkit-mask-size: contain;
