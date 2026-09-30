@@ -1,0 +1,224 @@
+/* ==========================================
+   ФОН ВСЕЙ СТРАНИЦЫ (library-back.jpg)
+   ========================================== */
+body {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.82)), url('/library-back.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   ШАПКА (Заголовок по центру)
+   ========================================== */
+.hero-header {
+  padding: 20px 0 10px;
+}
+
+.main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2b2d42;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.main-subtitle {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.page-title {
+  font-weight: 700;
+  color: #2b2d42;
+}
+
+/* Кнопка добавления */
+.btn-add-book {
+  background-color: #ff8d2f;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 10px rgba(255, 141, 47, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-add-book:hover {
+  background-color: #e0741e;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* ==========================================
+   СЕТКА И КАРТОЧКИ КНИГ
+   ========================================== */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.book-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.book-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* ОБЛОЖКА */
+.book-cover {
+  height: 150px;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Корешок книги слева */
+.book-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+  z-index: 2;
+}
+
+/* Центрирование и иконка книги без искажения цвета */
+.book-cover-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.book-icon-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  opacity: 0.95;
+  /* mix-blend-mode убран, чтобы иконка сохраняла свои родные цвета */
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.2));
+}
+
+/* 🎨 ТЁПЛАЯ ПАЛИТРА ОБЛОЖЕК (Жёлтый, Оранжевый, Красный, Бежевый/Белый) */
+.book-card:nth-child(6n+1) .book-cover {
+  background: linear-gradient(135deg, #e76f51 0%, #f4a261 100%); /* Тёплый терракотово-оранжевый */
+}
+.book-card:nth-child(6n+2) .book-cover {
+  background: linear-gradient(135deg, #ffffff 0%, #ffe8d6 100%); /* Нежный кремово-белый */
+}
+.book-card:nth-child(6n+3) .book-cover {
+  background: linear-gradient(135deg, #ff7b54 0%, #ffb26b 100%); /* Сочный кораллово-персиковый */
+}
+.book-card:nth-child(6n+4) .book-cover {
+  background: linear-gradient(135deg, #f4a261 0%, #e9c46a 100%); /* Золотисто-жёлтый */
+}
+.book-card:nth-child(6n+5) .book-cover {
+  background: linear-gradient(135deg, #d62828 0%, #f77f00 100%); /* Насыщенный красно-оранжевый */
+}
+.book-card:nth-child(6n+6) .book-cover {
+  background: linear-gradient(135deg, #f3d5b5 0%, #ffedd8 100%); /* Мягкий бежево-песочный */
+}
+
+/* ДЕТАЛИ И КНОПКИ */
+.book-details {
+  padding: 12px 4px 4px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-grow: 1;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-right: 8px;
+}
+
+.book-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #2b2d42;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+.book-title:hover {
+  color: #ff8d2f;
+}
+
+.book-author {
+  font-size: 0.82rem;
+  color: #8d99ae;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-action {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-action.edit {
+  background-color: #f4f1de;
+  color: #d4a373;
+}
+
+.btn-action.edit:hover {
+  background-color: #f2cc8f;
+  color: #3d405b;
+}
+
+.btn-action.delete {
+  background-color: #fde2e4;
+  color: #e63946;
+}
+
+.btn-action.delete:hover {
+  background-color: #e63946;
+  color: #ffffff;
+}

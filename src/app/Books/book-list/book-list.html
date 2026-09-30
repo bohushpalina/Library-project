@@ -1,24 +1,39 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3>Список книг:</h3>
-  <a routerLink="/book/add" class="btn btn-primary">+ Добавить книгу</a>
+<!-- Верхняя панель списка -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="page-title">Список книг</h3>
+  <a routerLink="/book/add" class="btn btn-add-book">+ Добавить книгу</a>
 </div>
 
-<ul class="list-group">
-  <li *ngFor="let book of books" class="list-group-item d-flex justify-content-between align-items-center">
-    <div>
-      <a [routerLink]="['/book', book.id]" class="fw-bold text-decoration-none me-2">
-        {{ book.name }}
-      </a>
-      <span class="text-muted">({{ book.author }})</span>
+<!-- Сетка карточек -->
+<div class="books-grid">
+  <div *ngFor="let book of books; let i = index" class="book-card">
+    
+    <!-- Обложка -->
+    <div class="book-cover">
+      <div class="book-spine"></div>
+      <div class="book-cover-content">
+        <img src="book.png" alt="Книга" class="book-icon-img">
+      </div>
     </div>
 
-    <div>
-      <a [routerLink]="['/book/edit', book.id]" class="btn btn-sm btn-outline-warning me-2">
-        Редактировать
-      </a>
-      <button (click)="deleteBook(book.id)" class="btn btn-sm btn-outline-danger">
-        Удалить
-      </button>
+    <!-- Детали книги -->
+    <div class="book-details">
+      <div class="book-info">
+        <a [routerLink]="['/book', book.id]" class="book-title">
+          {{ book.name }}
+        </a>
+        <div class="book-author">{{ book.author }}</div>
+      </div>
+
+      <div class="book-actions">
+        <a [routerLink]="['/book/edit', book.id]" class="btn-action edit" title="Редактировать">
+          ✎
+        </a>
+        <button (click)="deleteBook(book.id)" class="btn-action delete" title="Удалить">
+          ✕
+        </button>
+      </div>
     </div>
-  </li>
-</ul>
+
+  </div>
+</div>

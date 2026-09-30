@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+/* Глобальный фон приложения */
+body {
+  background-image: linear-gradient(rgba(241, 241, 224, 0.884), rgba(255, 107, 8, 0.404)), url('/library-back.jpg') !important;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
