@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Book } from '../book';
 import { BookService } from '../services/book.service';
 
 @Component({
@@ -11,26 +10,15 @@ import { BookService } from '../services/book.service';
   templateUrl: './book-list.html',
   styleUrl: './book-list.css'
 })
-export class BookListComponent implements OnInit {
-  books: Book[] = [];
+export class BookListComponent {
+  private bookService = inject(BookService);
 
-  constructor(private bookService: BookService) {}
-
-  ngOnInit(): void {
-    this.loadBooks();
-  }
-
-  loadBooks(): void {
-    this.bookService.getBooks().subscribe(data => {
-      this.books = data;
-    });
-  }
+  // Поток из Firestore: список обновляется сам при любых изменениях в базе
+  books$ = this.bookService.getBooks();
 
   deleteBook(id: number): void {
     if (confirm('Вы уверены, что хотите удалить эту книгу?')) {
-      this.bookService.deleteBook(id).subscribe(() => {
-        this.loadBooks();
-      });
+      this.bookService.deleteBook(id).subscribe();
     }
   }
 }

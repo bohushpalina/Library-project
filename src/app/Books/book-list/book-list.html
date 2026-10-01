@@ -6,7 +6,7 @@
 
 <!-- Сетка книг -->
 <div class="books-grid">
-  <div *ngFor="let book of books; let i = index"
+  <div *ngFor="let book of books$ | async; let i = index"
        class="book-card"
        [style.--book-color]="['#3D1E0B','#522108','#5C1D18','#4A2040','#2C3A2C','#612B11','#732A19','#3B2820'][(book.id || 0) % 8]">
 

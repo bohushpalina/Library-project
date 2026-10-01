@@ -1,81 +1,55 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, from } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { Book } from '../book';
-import { Books } from '../mock-book-list';
+import { FirestoreService } from './firestore.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+/**
+ * Прослойка над FirestoreService.
+ * Сигнатуры методов те же, что были раньше (Observable), поэтому
+ * book-form и остальные компоненты продолжают работать без изменений.
+ * Никакого localStorage / JSON — все данные только в Firestore.
+ */
+@Injectable({ providedIn: 'root' })
 export class BookService {
-  private storageKey = 'books_data';
-  private booksList: Book[] = [];
+  private fs = inject(FirestoreService);
 
-  constructor() {
-    this.loadBooks();
-  }
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-  }
-
-  private loadBooks(): void {
-    if (this.isBrowser()) {
-      const savedBooks = localStorage.getItem(this.storageKey);
-      if (savedBooks) {
-        this.booksList = JSON.parse(savedBooks);
-        return;
-      }
-    }
-    this.booksList = [...Books];
-    this.saveToStorage();
-  }
-
-  private saveToStorage(): void {
-    if (this.isBrowser()) {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.booksList));
-    }
+  // Firestore не принимает undefined в полях — приводим книгу к чистому виду
+  private clean(book: Book): Book {
+    return {
+      id: Number(book.id),
+      name: book.name ?? '',
+      author: book.author ?? ''
+    };
   }
 
   getBooks(): Observable<Book[]> {
-    return of([...this.booksList]);
+    return this.fs.getBooks();
   }
 
   getBook(id: number): Observable<Book | undefined> {
-    const foundBook = this.booksList.find(book => Number(book.id) === Number(id));
-    return of(foundBook ? { ...foundBook } : undefined);
+    return this.fs.getBook(Number(id));
   }
 
   addBook(book: Book): Observable<Book> {
-    const newId = this.booksList.length > 0 
-      ? Math.max(...this.booksList.map(b => Number(b.id))) + 1 
-      : 1;
-
-    const newBook: Book = { ...book, id: newId };
-    this.booksList.push(newBook);
-    this.saveToStorage();
-
-    return of(newBook);
+    return this.fs.getBooks().pipe(
+      take(1),
+      switchMap(books => {
+        const newId = books.length > 0
+          ? Math.max(...books.map(b => Number(b.id))) + 1
+          : 1;
+        const newBook = this.clean({ ...book, id: newId });
+        return from(this.fs.addBook(newBook)).pipe(map(() => newBook));
+      })
+    );
   }
 
   updateBook(updatedBook: Book): Observable<Book> {
-    const index = this.booksList.findIndex(b => Number(b.id) === Number(updatedBook.id));
-    if (index !== -1) {
-      this.booksList[index] = { ...updatedBook };
-      this.saveToStorage();
-    }
-    return of(updatedBook);
+    const book = this.clean(updatedBook);
+    return from(this.fs.updateBook(book.id, book)).pipe(map(() => book));
   }
 
   deleteBook(id: number): Observable<boolean> {
-    const index = this.booksList.findIndex(b => Number(b.id) === Number(id));
-    let isDeleted = false;
-
-    if (index !== -1) {
-      this.booksList.splice(index, 1);
-      this.saveToStorage();
-      isDeleted = true;
-    }
-
-    return of(isDeleted);
+    return from(this.fs.deleteBook(Number(id))).pipe(map(() => true));
   }
 }

@@ -32,11 +32,10 @@ body {
   flex-wrap: wrap;
   gap: 32px 20px;
   padding-bottom: 50px;
-  align-items: flex-start; /* 🎯 Выравнивание по верхнему краю — все книги на одной линии */
+  align-items: flex-start; 
 }
 
 .book-card {
-  /* Цвет --book-color задаётся в HTML по id книги (см. book-list.html) */
   background: transparent;
   border: none;
   padding: 0;
@@ -89,7 +88,6 @@ body {
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
 }
 
-/* --- 2. ОТКРЫТАЯ КНИГА --- */
 .opened-book-wrapper {
   position: absolute;
   bottom: 0;
