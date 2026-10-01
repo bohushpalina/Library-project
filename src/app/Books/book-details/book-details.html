@@ -1,52 +1,72 @@
 <ng-container *ngIf="vm$ | async as vm">
 
-  <!-- Загрузка из Firestore -->
-  <div *ngIf="vm.loading" class="not-found-card">
-    <h3>Загрузка...</h3>
-  </div>
+  <div *ngIf="vm.loading" class="details-loading"></div>
 
   <ng-container *ngIf="!vm.loading">
-    <div *ngIf="vm.book as book; else notFound"
-         class="book-details-card"
-         [style.--book-color]="['#3D1E0B','#522108','#5C1D18','#4A2040','#2C3A2C','#612B11','#732A19','#3B2820'][(book.id || 0) % 8]">
 
-      <!-- 📖 Левая колонка: увеличенный спрайт открытой книги -->
+    <div
+      *ngIf="vm.book as book; else notFound"
+      class="book-details-card"
+      [style.--book-color]="['#3D1E0B','#522108','#5C1D18','#4A2040','#2C3A2C','#612B11','#732A19','#3B2820'][(book.id || 0) % 8]"
+    >
+
       <div class="book-visual-col">
         <div class="opened-book-wrapper">
           <div class="opened-book-bg"></div>
-          <img src="/open-up.png" alt="Открытая книга" class="cover-img">
+          <img
+            src="/open-up.png"
+            alt="Открытая книга"
+            class="cover-img"
+          >
         </div>
       </div>
 
-      <!-- 📜 Правая колонка: текстовая информация и кнопки -->
       <div class="book-info-col">
         <h2 class="book-title">{{ book.name }}</h2>
 
         <div class="book-meta">
           <span class="book-id">id: {{ book.id }}</span>
-          <p *ngIf="book.author" class="book-author"><strong>Автор:</strong> {{ book.author }}</p>
+
+          <p
+            *ngIf="book.author"
+            class="book-author"
+          >
+            <strong>Автор(ы):</strong> {{ book.author }}
+          </p>
         </div>
 
-        <!-- 🎮 Кнопки действия в общей цветовой гамме -->
         <div class="details-actions">
-          <a routerLink="/" class="btn-detail-back">
+          <a
+            routerLink="/"
+            class="btn-detail-back"
+          >
             ← Назад к списку
           </a>
-          <a [routerLink]="['/book/edit', book.id]" class="btn-detail-edit">
+
+          <a
+            [routerLink]="['/book/edit', book.id]"
+            class="btn-detail-edit"
+          >
             ✎ Редактировать
           </a>
         </div>
       </div>
 
     </div>
+
   </ng-container>
 
 </ng-container>
 
-<!-- Сообщение, если книга не найдена -->
 <ng-template #notFound>
   <div class="not-found-card">
     <h3>Книга не найдена!</h3>
-    <a routerLink="/" class="btn-detail-back">Вернуться к списку</a>
+
+    <a
+      routerLink="/"
+      class="btn-detail-back"
+    >
+      Вернуться к списку
+    </a>
   </div>
 </ng-template>

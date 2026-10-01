@@ -1,32 +1,75 @@
 /* ==========================================
-   ОСНОВНАЯ КАРТОЧКА ДЕТАЛЕЙ КНИГИ
-   (только контейнер раскладки, без фона)
+   СОСТОЯНИЕ ЗАГРУЗКИ
+   Не показываем белую плашку "Загрузка..."
    ========================================== */
+
+.details-loading {
+  width: 100%;
+  min-height: calc(82vh - 100px);
+
+  margin: 20px 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  background: transparent;
+
+  border: none;
+  border-radius: 0;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  opacity: 0;
+
+  /*
+    Никаких transition / animation:
+    элемент не должен визуально "вспыхивать".
+  */
+  animation: none;
+  transition: none;
+}
+
+/* ==========================================
+   ОСНОВНАЯ КАРТОЧКА ДЕТАЛЕЙ КНИГИ
+   ========================================== */
+
 .book-details-card {
   display: flex;
   align-items: center;
   gap: 32px;
+
   width: 100%;
   min-height: calc(82vh - 100px);
+
   margin: 20px 0;
-  padding: 0 0 80px 0; /* нижний отступ поднимает весь контент на ~40px */
+  padding: 0 0 80px 0;
+
   box-sizing: border-box;
 
   background: none;
+
   border: none;
+
   box-shadow: none;
+
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
 /* ==========================================
-   ЛЕВАЯ СТОРОНА: СПРАЙТ КНИГИ
+   ЛЕВАЯ СТОРОНА: КНИГА
    ========================================== */
+
 .book-visual-col {
-  --book-size: clamp(340px, 42vw, 620px); /* размер книги меняй здесь */
+  --book-size: clamp(340px, 42vw, 620px);
 
   flex: 0 0 var(--book-size);
+
   width: var(--book-size);
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -34,230 +77,653 @@
 
 .opened-book-wrapper {
   position: relative;
+
   width: 100%;
-  aspect-ratio: 380 / 360; /* реальные пропорции open-up.png (ширина / высота) */
+
+  aspect-ratio: 380 / 360;
+
   display: block;
-  transform: translate(-70px, -50px); /* влево на 70px, вверх на 50px */
+
+  /*
+    Книга сразу находится
+    в конечном состоянии.
+  */
+  transform: none;
+
+  animation: none;
+  transition: none;
 }
 
-/* Задняя маска обложки + передний слой страниц */
+/* ==========================================
+   СЛОИ ОТКРЫТОЙ КНИГИ
+   ========================================== */
+
 .opened-book-bg,
 .cover-img {
   position: absolute;
+
   inset: 0;
+
   width: 100%;
   height: 100%;
 }
 
-/* Задняя маска обложки с динамическим цветом */
+/* ==========================================
+   ЗАДНЯЯ МАСКА ОБЛОЖКИ
+   ========================================== */
+
 .opened-book-bg {
   z-index: 1;
-  background-color: var(--book-color, #5C1D18);
-  -webkit-mask-image: url('/open-back.png');
-  mask-image: url('/open-back.png');
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  image-rendering: pixelated;
-}
 
-/* Передний слой с текстурой страниц */
-.cover-img {
-  z-index: 2;
-  max-width: none;
-  object-fit: fill;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
+  background-color:
+    var(--book-color, #5C1D18);
+
+  -webkit-mask-image:
+    url('/open-back.png');
+
+  mask-image:
+    url('/open-back.png');
+
+  -webkit-mask-size:
+    100% 100%;
+
+  mask-size:
+    100% 100%;
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
+
+  image-rendering:
+    pixelated;
 }
 
 /* ==========================================
-   ПРАВАЯ СТОРОНА: ПЛАШКА С ИНФОРМАЦИЕЙ
+   ПЕРЕДНИЙ СЛОЙ СТРАНИЦ
    ========================================== */
+
+.cover-img {
+  z-index: 2;
+
+  max-width: none;
+
+  object-fit: fill;
+
+  image-rendering:
+    pixelated;
+
+  filter:
+    drop-shadow(
+      0 10px 20px
+      rgba(0, 0, 0, 0.25)
+    );
+}
+
+/* ==========================================
+   ПРАВАЯ СТОРОНА: ИНФОРМАЦИЯ
+   ========================================== */
+
 .book-info-col {
   flex: 1 1 0;
-  min-width: 0;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 18px;
-  padding: 32px 40px;
-  box-sizing: border-box;
-  transform: translateY(-20px); /* плашка чуть выше */
 
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 2px solid #2b2d42;
-  border-radius: 20px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  min-width: 0;
+
+  align-self: center;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 18px;
+
+  padding: 32px 40px;
+
+  box-sizing: border-box;
+
+  /*
+    Поднимаем карточку без transform.
+    Это стабильнее при первом рендере.
+  */
+  margin-top: -20px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
+  border:
+    2px solid #2b2d42;
+
+  border-radius:
+    20px;
+
+  box-shadow:
+    0 12px 32px
+    rgba(0, 0, 0, 0.15);
+
+  /*
+    ВАЖНО:
+    никакого появления через animation.
+  */
+  animation: none;
+
+  transition: none;
+
+  will-change: auto;
 }
+
+/* ==========================================
+   ЗАГОЛОВОК
+   ========================================== */
 
 .book-title {
-  font-size: 2.6rem;
-  font-weight: 700;
-  color: #2b2d42;
-  margin: 0;
-  line-height: 1.2;
-  word-break: break-word;
+  font-size:
+    2.6rem;
+
+  font-weight:
+    700;
+
+  color:
+    #2b2d42;
+
+  margin:
+    0;
+
+  line-height:
+    1.2;
+
+  word-break:
+    break-word;
 }
+
+/* ==========================================
+   МЕТАИНФОРМАЦИЯ
+   ========================================== */
 
 .book-meta {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+
+  flex-direction:
+    column;
+
+  gap:
+    8px;
 }
 
 .book-id {
-  font-size: 1.1rem;
-  color: #6c757d;
-  font-weight: 600;
+  font-size:
+    1.1rem;
+
+  color:
+    #6c757d;
+
+  font-weight:
+    600;
 }
 
 .book-author {
-  font-size: 1.5rem;
-  color: #2b2d42;
-  margin: 4px 0 0 0;
+  font-size:
+    1.5rem;
+
+  color:
+    #2b2d42;
+
+  margin:
+    4px 0 0 0;
 }
 
 /* ==========================================
-   🎮 КНОПКИ УПРАВЛЕНИЯ
+   КНОПКИ
    ========================================== */
+
 .details-actions {
   display: flex;
-  gap: 16px;
-  margin-top: 16px;
-  flex-wrap: wrap;
+
+  gap:
+    16px;
+
+  margin-top:
+    16px;
+
+  flex-wrap:
+    wrap;
 }
 
+/* ==========================================
+   КНОПКА НАЗАД
+   ========================================== */
+
 .btn-detail-back {
-  background: rgba(255, 255, 255, 0.65);
-  color: #2b2d42;
-  border: 2px solid #2b2d42;
-  border-radius: 12px;
-  padding: 12px 26px;
-  font-weight: 600;
-  font-size: 1.05rem;
-  text-decoration: none;
-  box-shadow: 3px 3px 0px #2b2d42;
-  transition: all 0.15s ease;
-  display: inline-flex;
-  align-items: center;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.65
+    );
+
+  color:
+    #2b2d42;
+
+  border:
+    2px solid #2b2d42;
+
+  border-radius:
+    12px;
+
+  padding:
+    12px 26px;
+
+  font-weight:
+    600;
+
+  font-size:
+    1.05rem;
+
+  text-decoration:
+    none;
+
+  box-shadow:
+    3px 3px 0
+    #2b2d42;
+
+  transition:
+    all 0.15s ease;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
 }
 
 .btn-detail-back:hover {
-  background: rgba(255, 255, 255, 0.9);
-  color: #2b2d42;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #2b2d42;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.9
+    );
+
+  color:
+    #2b2d42;
+
+  transform:
+    translate(
+      -1px,
+      -1px
+    );
+
+  box-shadow:
+    4px 4px 0
+    #2b2d42;
 }
 
+/* ==========================================
+   КНОПКА РЕДАКТИРОВАНИЯ
+   ========================================== */
+
 .btn-detail-edit {
-  background-color: #ff8d2f;
-  color: #ffffff;
-  border: 2px solid #2b2d42;
-  border-radius: 12px;
-  padding: 12px 26px;
-  font-weight: 600;
-  font-size: 1.05rem;
-  text-decoration: none;
-  box-shadow: 3px 3px 0px #2b2d42;
-  transition: all 0.15s ease;
-  display: inline-flex;
-  align-items: center;
+  background-color:
+    #ff8d2f;
+
+  color:
+    #ffffff;
+
+  border:
+    2px solid #2b2d42;
+
+  border-radius:
+    12px;
+
+  padding:
+    12px 26px;
+
+  font-weight:
+    600;
+
+  font-size:
+    1.05rem;
+
+  text-decoration:
+    none;
+
+  box-shadow:
+    3px 3px 0
+    #2b2d42;
+
+  transition:
+    all 0.15s ease;
+
+  display:
+    inline-flex;
+
+  align-items:
+    center;
 }
 
 .btn-detail-edit:hover {
-  background-color: #e0741e;
-  color: #ffffff;
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0px #2b2d42;
+  background-color:
+    #e0741e;
+
+  color:
+    #ffffff;
+
+  transform:
+    translate(
+      -1px,
+      -1px
+    );
+
+  box-shadow:
+    4px 4px 0
+    #2b2d42;
 }
 
 /* ==========================================
-   ОШИБКА "КНИГА НЕ НАЙДЕНА"
+   КНИГА НЕ НАЙДЕНА
    ========================================== */
+
 .not-found-card {
   width: 100%;
-  min-height: calc(70vh - 100px);
+
+  min-height:
+    calc(70vh - 100px);
+
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px);
-  border: 2px solid #2b2d42;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+
+  flex-direction:
+    column;
+
+  justify-content:
+    center;
+
+  align-items:
+    center;
+
+  margin:
+    20px 0;
+
+  padding:
+    40px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.65
+    );
+
+  backdrop-filter:
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
+
+  border:
+    2px solid #2b2d42;
+
+  border-radius:
+    20px;
+
+  text-align:
+    center;
+
+  box-shadow:
+    0 8px 20px
+    rgba(
+      0,
+      0,
+      0,
+      0.1
+    );
+
+  box-sizing:
+    border-box;
 }
 
 .not-found-card h3 {
-  color: #9f1239;
-  font-size: 2rem;
-  margin-bottom: 20px;
+  color:
+    #9f1239;
+
+  font-size:
+    2rem;
+
+  margin-bottom:
+    20px;
 }
 
 /* ==========================================
-   📱 ТЕЛЕФОН / УЗКИЙ ЭКРАН:
-   картинка сверху, плашка с текстом снизу
+   📱 ТЕЛЕФОН / УЗКИЙ ЭКРАН
    ========================================== */
+
 @media (max-width: 768px) {
-  .book-details-card {
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 20px;
-    min-height: 0;
-    margin: 8px 0 0;
-    padding: 0 0 40px 0;
+
+  /* ========================================
+     СОСТОЯНИЕ ЗАГРУЗКИ
+     ======================================== */
+
+  .details-loading {
+    width: 100%;
+
+    min-height: 60vh;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent;
+
+    opacity: 0;
+
+    border: none;
+
+    box-shadow: none;
+
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    animation: none;
+    transition: none;
   }
 
-  .book-visual-col {
-    --book-size: min(76vw, 340px);
+  /* ========================================
+     ОСНОВНОЙ КОНТЕЙНЕР
+     ======================================== */
 
-    flex: 0 0 auto;      /* в колонке flex-basis иначе стал бы высотой */
-    width: 100%;
-    justify-content: center;
+  .book-details-card {
+    flex-direction:
+      column;
+
+    align-items:
+      stretch;
+
+    justify-content:
+      flex-start;
+
+    gap:
+      20px;
+
+    min-height:
+      0;
+
+    margin:
+      8px 0 0;
+
+    padding:
+      0 0 40px 0;
+  }
+
+  /* ========================================
+     КНИГА
+     ======================================== */
+
+  .book-visual-col {
+    --book-size:
+      min(
+        76vw,
+        340px
+      );
+
+    flex:
+      0 0 auto;
+
+    width:
+      100%;
+
+    justify-content:
+      center;
   }
 
   .opened-book-wrapper {
-    width: var(--book-size);
-    transform: none;     /* смещение для десктопа на телефоне обрезало книгу */
+    width:
+      var(--book-size);
+
+    transform:
+      none;
+
+    animation:
+      none;
+
+    transition:
+      none;
   }
+
+  /* ========================================
+     ИНФОРМАЦИОННАЯ ПЛАШКА
+     ======================================== */
 
   .book-info-col {
-    flex: 0 0 auto;
-    align-self: stretch;
-    width: 100%;
-    transform: none;
-    padding: 20px 22px;
-    gap: 14px;
-    border-radius: 16px;
+    flex:
+      0 0 auto;
+
+    align-self:
+      stretch;
+
+    width:
+      100%;
+
+    /*
+      Полностью убираем desktop-смещение.
+    */
+    margin-top:
+      0;
+
+    padding:
+      20px 22px;
+
+    gap:
+      14px;
+
+    border-radius:
+      16px;
+
+    background:
+      rgba(
+        255,
+        255,
+        255,
+        0.55
+      );
+
+    /*
+      Blur оставляем,
+      как у рабочей формы.
+    */
+    backdrop-filter:
+      blur(10px);
+
+    -webkit-backdrop-filter:
+      blur(10px);
+
+    /*
+      Главное:
+      плашка появляется сразу.
+    */
+    animation:
+      none;
+
+    transition:
+      none;
+
+    will-change:
+      auto;
   }
 
-  .book-title { font-size: 1.7rem; }
-  .book-author { font-size: 1.15rem; }
-  .book-id { font-size: 0.95rem; }
+  /* ========================================
+     ТЕКСТ
+     ======================================== */
 
-  .details-actions { gap: 10px; margin-top: 8px; }
+  .book-title {
+    font-size:
+      1.7rem;
+  }
+
+  .book-author {
+    font-size:
+      1.15rem;
+  }
+
+  .book-id {
+    font-size:
+      0.95rem;
+  }
+
+  /* ========================================
+     КНОПКИ
+     ======================================== */
+
+  .details-actions {
+    gap:
+      10px;
+
+    margin-top:
+      8px;
+  }
 
   .btn-detail-back,
   .btn-detail-edit {
-    padding: 10px 16px;
-    font-size: 0.95rem;
+    padding:
+      10px 16px;
+
+    font-size:
+      0.95rem;
   }
+
+  /* ========================================
+     NOT FOUND
+     ======================================== */
 
   .not-found-card {
-    min-height: 50vh;
-    padding: 24px;
+    min-height:
+      50vh;
+
+    padding:
+      24px;
   }
 
-  .not-found-card h3 { font-size: 1.5rem; }
+  .not-found-card h3 {
+    font-size:
+      1.5rem;
+  }
 }

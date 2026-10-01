@@ -1,8 +1,7 @@
-/* ==========================================
-   ШАПКА
-   (фон страницы теперь в book-center.css — слой .page-bg)
-   ========================================== */
-.page-title { font-weight: 700; color: #2b2d42; }
+.page-title {
+  font-weight: 700;
+  color: #2b2d42;
+}
 
 .btn-add-book {
   background-color: #ff8d2f;
@@ -14,23 +13,23 @@
   box-shadow: 0 4px 10px rgba(255, 141, 47, 0.3);
   transition: all 0.2s ease;
 }
-.btn-add-book:hover { background-color: #e0741e; color: #fff; transform: translateY(-2px); }
 
-/* ==========================================
-   СЕТКА КНИГ (ВСЕ КНИГИ НА ОДНОМ УРОВНЕ)
-   Размеры спрайтов вынесены в переменные,
-   чтобы на телефоне их можно было уменьшить.
-   ========================================== */
+.btn-add-book:hover {
+  background-color: #e0741e;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 .books-grid {
-  --wrap-h: 260px;   /* высота кликабельной области книги */
-  --spine-h: 220px;  /* высота закрытой книги */
-  --open-h: 220px;   /* высота открытой книги */
+  --wrap-h: 260px;
+  --spine-h: 220px;
+  --open-h: 220px;
 
   display: flex;
   flex-wrap: wrap;
   gap: 32px 20px;
   padding-bottom: 50px;
-  align-items: flex-start; 
+  align-items: flex-start;
 }
 
 .book-card {
@@ -39,262 +38,543 @@
   padding: 0;
   position: relative;
   width: 110px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* ==========================================
-   ЛОГИКА ССЫЛКИ-КАРТИНКИ
-   ========================================== */
 .book-spine-wrapper {
   position: relative;
+
   display: flex;
   justify-content: center;
   align-items: flex-end;
+
   width: 100%;
   height: var(--wrap-h);
+
   cursor: pointer;
   text-decoration: none;
+
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-/* --- 1. ЗАКРЫТАЯ КНИГА --- */
 .closed-book-part {
   position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  opacity: 1;
+  transform: scale(1);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+
+  transition-delay: 0.18s;
+
+  will-change: opacity, transform;
 }
 
 .book-spine-bg {
   position: absolute;
+
   top: 9.5%;
+
   height: 80%;
   width: 18%;
+
   border-radius: 8px;
+
   z-index: 1;
+
   background-color: var(--book-color, #5C1D18);
 }
 
 .spine-img {
   position: relative;
+
   z-index: 2;
+
   height: var(--spine-h);
   width: auto;
+
   object-fit: contain;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+
+  filter:
+    drop-shadow(
+      0 6px 10px rgba(0, 0, 0, 0.25)
+    );
+
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+
+  transition-delay: 0.18s;
+
+  will-change: transform, opacity;
 }
 
 .opened-book-wrapper {
   position: absolute;
+
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%) translateY(10px) scale(0.9);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   opacity: 0;
+
   pointer-events: none;
+
   z-index: 20;
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  transform:
+    translateX(-50%)
+    translateY(10px)
+    scale(0.9);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(
+      0.25,
+      0.8,
+      0.25,
+      1
+    );
+
+  transition-delay: 0.18s;
+
+  will-change: opacity, transform;
 }
 
 .opened-book-bg {
   position: absolute;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
+
   z-index: 1;
-  background-color: var(--book-color, #5C1D18);
-  -webkit-mask-image: url('/opened_book_back.png');
-  mask-image: url('/opened_book_back.png');
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
+
+  background-color:
+    var(--book-color, #5C1D18);
+
+  -webkit-mask-image:
+    url('/opened_book_back.png');
+
+  mask-image:
+    url('/opened_book_back.png');
+
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
+    center;
+
+  mask-position:
+    center;
 }
 
 .cover-img {
   position: relative;
+
   z-index: 2;
+
   height: var(--open-h);
   width: auto;
+
   object-fit: contain;
-  filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.35));
+
+  filter:
+    drop-shadow(
+      0 8px 15px rgba(0, 0, 0, 0.35)
+    );
 }
 
-/* Раскрытие книги при наведении — только там, где есть настоящий hover (мышь).
-   На телефоне «залипший» hover после тапа ломал бы сетку. */
-@media (hover: hover) {
-  .book-card:hover .closed-book-part {
-    opacity: 0;
-    transform: scale(0.9);
-    pointer-events: none;
-  }
+.book-card:hover .closed-book-part {
+  opacity: 0;
 
-  .book-card:hover .opened-book-wrapper {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+  transform:
+    scale(0.9);
+
+  pointer-events: none;
+
+  transition-delay: 0.18s;
+}
+
+.book-card:hover .opened-book-wrapper {
+  opacity: 1;
+
+  pointer-events: auto;
+
+  transform:
+    translateX(-50%)
+    translateY(0)
+    scale(1);
+
+  transition-delay: 0.18s;
 }
 
 .book-info-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.45); 
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 2px solid rgba(43, 45, 66, 0.85);
+
+  background:
+    rgba(255, 255, 255, 0.45);
+
+  backdrop-filter:
+    blur(8px);
+
+  -webkit-backdrop-filter:
+    blur(8px);
+
+  border:
+    2px solid rgba(
+      43,
+      45,
+      66,
+      0.85
+    );
+
   border-radius: 8px;
+
   padding: 6px 8px;
+
   margin-top: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 4px 10px
+    rgba(0, 0, 0, 0.05);
+
   text-align: center;
+
   box-sizing: border-box;
 }
 
 .book-title {
   font-weight: 700;
+
   font-size: 0.82rem;
+
   color: #2b2d42;
+
   line-height: 1.2;
+
   white-space: normal;
+
   word-break: break-word;
 }
 
 .book-author {
   font-size: 0.72rem;
+
   color: #4a4e69;
+
   margin-top: 2px;
+
   line-height: 1.15;
+
   white-space: normal;
+
   word-break: break-word;
 }
 
-/* ==========================================
-   🎮 ПОЛУПРОЗРАЧНЫЕ ПИКСЕЛЬНЫЕ КНОПКИ
-   ========================================== */
 .pixel-actions {
   display: flex;
+
   gap: 8px;
+
   margin-top: 8px;
+
   justify-content: center;
+
   align-items: center;
 }
 
 .btn-pixel {
   width: 28px;
   height: 28px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   font-size: 0.8rem;
+
   font-weight: bold;
+
   cursor: pointer;
+
   text-decoration: none;
+
   border-radius: 4px;
-  border: 2px solid #2b2d42;
-  box-shadow: 2px 2px 0px #2b2d42;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  transition: all 0.1s ease;
+
+  border:
+    2px solid #2b2d42;
+
+  box-shadow:
+    2px 2px 0
+    #2b2d42;
+
+  backdrop-filter:
+    blur(4px);
+
+  -webkit-backdrop-filter:
+    blur(4px);
+
+  transition:
+    all 0.1s ease;
+
   user-select: none;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-pixel:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0px 0px 0px #2b2d42;
+  transform:
+    translate(2px, 2px);
+
+  box-shadow:
+    0 0 0 #2b2d42;
 }
 
-/* Полупрозрачный кремовый для редактирования */
 .btn-pixel.edit {
-  background-color: rgba(254, 239, 221, 0.55);
-  color: #6b4300;
+  background-color:
+    rgba(
+      254,
+      239,
+      221,
+      0.55
+    );
+
+  color:
+    #6b4300;
 }
 
 .btn-pixel.edit:hover {
-  background-color: rgba(251, 209, 162, 0.85);
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #2b2d42;
+  background-color:
+    rgba(
+      251,
+      209,
+      162,
+      0.85
+    );
+
+  transform:
+    translate(-1px, -1px);
+
+  box-shadow:
+    3px 3px 0
+    #2b2d42;
 }
 
-/* Полупрозрачный нежно-розовый для удаления */
 .btn-pixel.delete {
-  background-color: rgba(255, 229, 236, 0.55);
-  color: #9f1239;
+  background-color:
+    rgba(
+      255,
+      229,
+      236,
+      0.55
+    );
+
+  color:
+    #9f1239;
 }
 
 .btn-pixel.delete:hover {
-  background-color: rgba(255, 179, 193, 0.85);
-  color: #780016;
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px #2b2d42;
+  background-color:
+    rgba(
+      255,
+      179,
+      193,
+      0.85
+    );
+
+  color:
+    #780016;
+
+  transform:
+    translate(-1px, -1px);
+
+  box-shadow:
+    3px 3px 0
+    #2b2d42;
 }
 
-/* ==========================================
-   📱 ТЕЛЕФОН: 4 КНИГИ В РЯД, ВСЁ ПОМЕНЬШЕ
-   ========================================== */
 @media (max-width: 600px) {
+
   .books-grid {
-    --wrap-h: 104px;
-    --spine-h: 92px;
-    --open-h: 80px;
+    --wrap-h: 120px;
+    --spine-h: 106px;
+    --open-h: 92px;
 
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px 6px;
+
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 20px 6px;
+
     justify-items: center;
+
     align-items: start;
-    padding-bottom: 30px;
+
+    padding-bottom: 32px;
   }
 
   .book-card {
     width: 100%;
-    max-width: 92px;
+
+    max-width: 106px;
   }
 
-  .book-spine-bg { border-radius: 4px; }
+  .book-spine-bg {
+    border-radius: 5px;
+  }
+
+  .spine-img {
+    height: var(--spine-h);
+
+    transition:
+      transform 0.5s ease,
+      opacity 0.5s ease;
+
+    transition-delay: 0.18s;
+  }
+
+  .opened-book-wrapper {
+    transform:
+      translateX(-50%)
+      translateY(10px)
+      scale(0.9);
+
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s cubic-bezier(
+        0.25,
+        0.8,
+        0.25,
+        1
+      );
+
+    transition-delay: 0.18s;
+  }
+
+  .book-card:hover .closed-book-part {
+    opacity: 0;
+
+    transform:
+      scale(0.9);
+
+    transition-delay: 0.08s;
+  }
+
+  .book-card:hover .opened-book-wrapper {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(0)
+      scale(1);
+
+    transition-delay: 0.08s;
+  }
 
   .book-info-card {
-    border-width: 1.5px;
-    border-radius: 6px;
-    padding: 3px 4px;
-    margin-top: 6px;
+    border-width: 1.7px;
+
+    border-radius: 7px;
+
+    padding: 3.5px 4.5px;
+
+    margin-top: 7px;
   }
 
-  /* длинные названия обрезаются, чтобы карточки не растягивались */
   .book-title {
-    font-size: 0.62rem;
-    line-height: 1.15;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size:
+      0.71rem;
+
+    line-height:
+      1.15;
+
+    display:
+      -webkit-box;
+
+    -webkit-line-clamp:
+      3;
+
+    -webkit-box-orient:
+      vertical;
+
+    overflow:
+      hidden;
   }
 
   .book-author {
-    font-size: 0.55rem;
-    margin-top: 1px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-size:
+      0.63rem;
+
+    margin-top:
+      1px;
+
+    display:
+      -webkit-box;
+
+    -webkit-line-clamp:
+      2;
+
+    -webkit-box-orient:
+      vertical;
+
+    overflow:
+      hidden;
   }
 
-  .pixel-actions { gap: 5px; margin-top: 6px; }
+  .pixel-actions {
+    gap:
+      5px;
+
+    margin-top:
+      7px;
+  }
 
   .btn-pixel {
-    width: 22px;
-    height: 22px;
-    font-size: 0.65rem;
-    border-width: 1.5px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 0px #2b2d42;
+    width:
+      25px;
+
+    height:
+      25px;
+
+    font-size:
+      0.72rem;
+
+    border-width:
+      1.6px;
+
+    border-radius:
+      3px;
+
+    box-shadow:
+      1.5px 1.5px 0
+      #2b2d42;
   }
 }
