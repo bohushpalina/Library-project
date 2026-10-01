@@ -1,0 +1,35 @@
+/* ==========================================
+   ФОН ВСЕХ СТРАНИЦ
+   Слой, прибитый к экрану (вместо background-attachment: fixed,
+   который на телефонах заставляет фон "уезжать").
+   Сверху — белая дымка, плавно исчезающая вниз,
+   чтобы заголовок читался, а низ оставался ярким.
+   ========================================== */
+.page-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.55) 18%,
+      rgba(255, 255, 255, 0.18) 42%,
+      rgba(255, 255, 255, 0) 65%
+    ),
+    url('/library-back.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* lvh = максимальная высота экрана (когда адресная строка скрыта),
+   поэтому фон не дёргается при скролле на телефоне */
+@supports (height: 100lvh) {
+  .page-bg { height: 100lvh; }
+}

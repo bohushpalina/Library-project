@@ -203,3 +203,61 @@
   font-size: 2rem;
   margin-bottom: 20px;
 }
+
+/* ==========================================
+   📱 ТЕЛЕФОН / УЗКИЙ ЭКРАН:
+   картинка сверху, плашка с текстом снизу
+   ========================================== */
+@media (max-width: 768px) {
+  .book-details-card {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 20px;
+    min-height: 0;
+    margin: 8px 0 0;
+    padding: 0 0 40px 0;
+  }
+
+  .book-visual-col {
+    --book-size: min(76vw, 340px);
+
+    flex: 0 0 auto;      /* в колонке flex-basis иначе стал бы высотой */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .opened-book-wrapper {
+    width: var(--book-size);
+    transform: none;     /* смещение для десктопа на телефоне обрезало книгу */
+  }
+
+  .book-info-col {
+    flex: 0 0 auto;
+    align-self: stretch;
+    width: 100%;
+    transform: none;
+    padding: 20px 22px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+
+  .book-title { font-size: 1.7rem; }
+  .book-author { font-size: 1.15rem; }
+  .book-id { font-size: 0.95rem; }
+
+  .details-actions { gap: 10px; margin-top: 8px; }
+
+  .btn-detail-back,
+  .btn-detail-edit {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+  }
+
+  .not-found-card {
+    min-height: 50vh;
+    padding: 24px;
+  }
+
+  .not-found-card h3 { font-size: 1.5rem; }
+}

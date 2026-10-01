@@ -25,20 +25,38 @@ const angularApp = new AngularNodeAppEngine();
  */
 
 /**
+ * Файлы с хэшем в имени (main-XXXXXXXX.js, styles-XXXXXXXX.css, шрифты):
+ * при изменении содержимого меняется и имя, поэтому их безопасно кэшировать на год.
+ */
+const HASHED_ASSET = /-[A-Za-z0-9]{8}\.(?:js|css|woff2?|ttf)$/;
+
+/**
  * Serve static files from /browser
+ *
+ * Раньше для ВСЕХ файлов стояло maxAge: '1y' — из-за этого favicon, картинки и т.п.
+ * (у них нет хэша в имени) браузер держал год и не видел обновлений.
+ * Теперь: хэшированные файлы — на год, остальное — с обязательной перепроверкой (ETag).
  */
 app.use(
   express.static(browserDistFolder, {
-    maxAge: '1y',
     index: false,
     redirect: false,
+    setHeaders: (res, filePath) => {
+      if (HASHED_ASSET.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      } else {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    },
   }),
 );
 
 /**
  * Handle all other requests by rendering the Angular application.
+ * HTML не кэшируем, чтобы после деплоя сразу приходили актуальные title и иконка.
  */
 app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-cache');
   angularApp
     .handle(req)
     .then((response) =>

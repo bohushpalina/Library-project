@@ -159,3 +159,35 @@
   box-shadow: 3px 3px 0px rgba(43, 45, 66, 0.5);
   border-color: rgba(43, 45, 66, 0.5);
 }
+
+/* ==========================================
+   📱 ТЕЛЕФОН
+   ========================================== */
+@media (max-width: 600px) {
+  .book-form-wrapper {
+    min-height: 0;
+    margin: 8px 0;
+    padding-bottom: 40px;
+    align-items: flex-start;
+  }
+
+  .book-form-card {
+    padding: 22px 18px;
+    gap: 18px;
+    border-radius: 16px;
+  }
+
+  .form-title { font-size: 1.6rem; }
+  .form-label-pixel { font-size: 1rem; }
+
+  /* 16px — чтобы iOS не приближал страницу при фокусе на поле */
+  .form-input-pixel { font-size: 16px; padding: 10px 14px; }
+
+  .form-actions { gap: 12px; }
+
+  .btn-form-cancel,
+  .btn-form-save {
+    padding: 10px 18px;
+    font-size: 1rem;
+  }
+}
