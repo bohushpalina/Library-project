@@ -3,33 +3,32 @@
    Слой, прибитый к экрану (вместо background-attachment: fixed,
    который на телефонах заставляет фон "уезжать").
    Сверху — белая дымка, плавно исчезающая вниз,
-   чтобы заголовок читался, а низ оставался ярким.
-   ========================================== */
+   чтобы заголовок читался, а низ оставался ярким.*/
+
 .page-bg {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: -100;
   pointer-events: none;
 
-  background-image:
-    linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.55) 18%,
-      rgba(255, 255, 255, 0.18) 42%,
-      rgba(255, 255, 255, 0) 65%
-    ),
+  /* Основной фон приложения */
+  background-image: 
+    linear-gradient(rgba(241, 241, 224, 0.884), rgba(255, 107, 8, 0.404)), 
     url('/library-back.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  /* Выносит слой на аппаратное ускорение GPU, предотвращая дергание */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-/* lvh = максимальная высота экрана (когда адресная строка скрыта),
-   поэтому фон не дёргается при скролле на телефоне */
 @supports (height: 100lvh) {
-  .page-bg { height: 100lvh; }
+  .page-bg { 
+    height: 100lvh; 
+  }
 }

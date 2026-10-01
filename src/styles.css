@@ -1,9 +1,10 @@
-/* Глобальный фон приложения */
+/* styles.css */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
-  background-image: linear-gradient(rgba(241, 241, 224, 0.884), rgba(255, 107, 8, 0.404)), url('/library-back.jpg') !important;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  margin: 0;
   min-height: 100vh;
+  /* Убраны background-image, background-attachment и background-position */
 }
