@@ -42,11 +42,10 @@
         </div>
       </div>
 
-      <!-- 🎮 Кнопки -->
       <div class="form-actions">
         <a routerLink="/" class="btn-form-cancel">← Отмена</a>
         <button type="submit" class="btn-form-save" [disabled]="bookForm.invalid">
-          {{ isEditMode ? '✔ Сохранить' : '+ Добавить' }}
+          {{ isEditMode ? 'Сохранить' : '+ Добавить' }}
         </button>
       </div>
 

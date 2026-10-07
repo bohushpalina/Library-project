@@ -4,17 +4,10 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { Book } from '../book';
 import { FirestoreService } from './firestore.service';
 
-/**
- * Прослойка над FirestoreService.
- * Сигнатуры методов те же, что были раньше (Observable), поэтому
- * book-form и остальные компоненты продолжают работать без изменений.
- * Никакого localStorage / JSON — все данные только в Firestore.
- */
 @Injectable({ providedIn: 'root' })
 export class BookService {
   private fs = inject(FirestoreService);
 
-  // Firestore не принимает undefined в полях — приводим книгу к чистому виду
   private clean(book: Book): Book {
     return {
       id: Number(book.id),

@@ -13,7 +13,6 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Book } from '../book';
-import { Books } from '../mock-book-list';
 
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
@@ -21,8 +20,6 @@ export class FirestoreService {
   private injector = inject(Injector);
   private booksCollection = collection(this.firestore, 'list-books');
 
-  // Firebase-потоки создаём внутри контекста внедрения зависимостей,
-  // чтобы AngularFire не ругался, когда метод вызван из switchMap и т.п.
   private run<T>(fn: () => T): T {
     return runInInjectionContext(this.injector, fn);
   }
@@ -54,8 +51,4 @@ export class FirestoreService {
     return deleteDoc(doc(this.firestore, `list-books/${id}`));
   }
 
-  // Разовая заливка данных из mock-book-list.ts (сама нигде не вызывается)
-  addAllBooks(): Promise<void[]> {
-    return Promise.all(Books.map((book: Book) => this.addBook(book)));
-  }
 }
